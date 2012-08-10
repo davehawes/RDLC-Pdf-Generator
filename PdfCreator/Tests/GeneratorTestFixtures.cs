@@ -6,14 +6,8 @@
 
 namespace PdfCreator.Tests
 {
-    using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Text;
-
     using NUnit.Framework;
-
     using PdfCreator.Reports;
     using PdfCreator.Reports.MasterDetailSample;
     using PdfCreator.Reports.Sample1;
@@ -29,9 +23,76 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateSample1Dataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\Sample1\\Template.rdlc");
-            var pdfFile = Reports.Generator.CreatePdf(reportDefinition);
+            var file = Reports.Generator.CreatePdf(reportDefinition);
 
-            var filestream = File.Create("C:\\test.pdf");
+            SaveFile(file, "SimpleDataSet.pdf");
+        }
+        
+        [Test]
+        public void CreatePdf_SampleReportViaStreamDefinition_ValidPdfFile()
+        {
+            var dataset = CreateSample1Dataset();
+            var reportDefinition = new ReportFromStreamDefinitionFacade(dataset, File.ReadAllBytes("Reports\\Sample1\\Template.rdlc"));
+            var file = Reports.Generator.CreatePdf(reportDefinition);
+
+            SaveFile(file, "SimpleDataSetViaStreamDefinition.pdf");
+        }
+
+        [Test]
+        public void CreatePdf_MasterDetailDataSet_ValidPdfFile()
+        {
+            var dataset = CreateMasterDetailDataset();
+            var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
+            var file = Reports.Generator.CreatePdf(reportDefinition);
+
+            SaveFile(file, "MasterDetailDataSet.pdf");
+        }
+
+        [Test]
+        public void CreatePdf_MasterDetailDataSet_ValidWordFile()
+        {
+            var dataset = CreateMasterDetailDataset();
+            var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
+            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.WORD);
+
+            SaveFile(file, "MasterDetailDataSet.doc");
+        }
+
+        [Test]
+        public void CreatePdf_MasterDetailDataSet_ValidExcelFile()
+        {
+            var dataset = CreateMasterDetailDataset();
+            var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
+            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.EXCEL);
+
+            SaveFile(file, "MasterDetailDataSet.xls");
+        }
+
+        [Test]
+        public void CreatePdf_MasterDetailDataSet_ValidImageFile()
+        {
+            var dataset = CreateMasterDetailDataset();
+            var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
+            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.IMAGE);
+
+            SaveFile(file, "MasterDetailDataSet.jpg");
+        }
+
+        [Test]
+        public void CreatePdf_MasterDetailDatasetFromStream_ValidPdfFile()
+        {
+            var dataset = CreateMasterDetailDataset();
+            var report = new ReportFromStreamDefinitionFacade(dataset, File.ReadAllBytes("Reports\\MasterDetailSample\\Template.rdlc"));
+
+            report.SubReports.Add(new SubReportFromStreamDefinitionFacade(File.ReadAllBytes("Reports\\MasterDetailSample\\Template_Detail.rdlc"), "Template_Detail"));            
+            var file = Reports.Generator.CreatePdf(report);
+
+            SaveFile(file, "MasterDetailDatasetFromStream.pdf");
+        }
+
+        private static void SaveFile(byte[] pdfFile, string fileName)
+        {
+            var filestream = File.Create(fileName);
             filestream.Write(pdfFile, 0, pdfFile.Length);
             filestream.Flush(true);
             filestream.Close();
@@ -48,51 +109,6 @@ namespace PdfCreator.Tests
 
             dataset.MasterData.AddMasterDataRow(masterDataRow);
             return dataset;
-        }
-
-        [Test]
-        public void CreatePdf_SampleReportViaStreamDefinition_ValidPdfFile()
-        {
-            var dataset = CreateSample1Dataset();
-            var reportDefinition = new ReportFromStreamDefinitionFacade(
-                dataset, File.ReadAllBytes("Reports\\Sample1\\Template.rdlc"));
-            
-            var pdfFile = Reports.Generator.CreatePdf(reportDefinition);
-
-            var filestream = File.Create("C:\\test.pdf");
-            filestream.Write(pdfFile, 0, pdfFile.Length);
-            filestream.Flush(true);
-            filestream.Close();
-        }
-
-        [Test]
-        public void CreatePdf_MasterDetailDataSet_ValidPdfFile()
-        {
-            var dataset = CreateMasterDetailDataset();
-            var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
-            var pdfFile = Reports.Generator.CreatePdf(reportDefinition);
-
-            var filestream = File.Create("C:\\test.pdf");
-            filestream.Write(pdfFile, 0, pdfFile.Length);
-            filestream.Flush(true);
-            filestream.Close();
-        }
-
-        [Test]
-        public void CreatePdf_MasterDetailDatasetFromStream_ValidPdfFile()
-        {
-            var dataset = CreateMasterDetailDataset();
-
-            var report = new ReportFromStreamDefinitionFacade(dataset, File.ReadAllBytes("Reports\\MasterDetailSample\\Template.rdlc"));
-
-            report.SubReports.Add(new SubReportFromStreamDefinitionFacade(File.ReadAllBytes("Reports\\MasterDetailSample\\Template_Detail.rdlc"), "Template_Detail"));
-            
-            var pdfFile = Reports.Generator.CreatePdf(report);
-
-            var filestream = File.Create("C:\\test.pdf");
-            filestream.Write(pdfFile, 0, pdfFile.Length);
-            filestream.Flush(true);
-            filestream.Close();
         }
 
         private static DataSet CreateMasterDetailDataset()
@@ -113,6 +129,15 @@ namespace PdfCreator.Tests
             detailDataRow.Id = 4;
 
             dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
+
+            detailDataRow = dataset.Template_Detail.NewTemplate_DetailRow();
+            detailDataRow.Description = "Description about detail data row 2";
+            detailDataRow.Name = "Name of description row 2";
+            detailDataRow.MasterDataId = 1;
+            detailDataRow.Id = 6;
+
+            dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
+
             return dataset;
         }
     }

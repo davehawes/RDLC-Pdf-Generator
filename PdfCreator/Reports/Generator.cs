@@ -6,13 +6,7 @@
 
 namespace PdfCreator.Reports
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-
     using Microsoft.Reporting.WebForms;
 
     /// <summary>
@@ -20,74 +14,46 @@ namespace PdfCreator.Reports
     /// </summary>
     public class Generator
     {
-        public static byte[] CreatePdf(ReportFromStreamDefinitionFacade report)
+        public enum FileTypes { PDF, WORD, EXCEL, IMAGE }
+
+        public static byte[] CreatePdf(ReportFromStreamDefinitionFacade report, FileTypes ouputType = FileTypes.PDF)
         {
-            var reportViewer = new ReportViewer();
-            LocalReport localReport = reportViewer.LocalReport;
-
-            localReport.SubreportProcessing += LocalReport_SubreportProcessing;
-            localReport.EnableExternalImages = true;
+            var localReport = GetNewLocalReport(report.ReportDataSet);
             localReport.LoadReportDefinition(report.Definition);
-            
-                foreach (var subReport in report.SubReports)
-                {
-                    localReport.LoadSubreportDefinition(subReport.Name, subReport.Definition);
-                }
-            
 
-            localReport.DataSources.Clear();
-
-            foreach (DataTable datatable in report.ReportDataSet.Tables)
+            foreach (var subReport in report.SubReports)
             {
-                localReport.DataSources.Add(new ReportDataSource(datatable.TableName, datatable));
+                localReport.LoadSubreportDefinition(subReport.Name, subReport.Definition);
             }
 
-            Warning[] warnings;
-            string mimeType, encoding, fileNameExtension;
-            string[] streams;
+            return localReport.Render(ouputType.ToString());
+        }
+        
+        public static byte[] CreatePdf(ReportFromFileDefinitionFacade report, FileTypes outputType = FileTypes.PDF)
+        {
+            var localReport = GetNewLocalReport(report.ReportDataSet);
 
-            byte[] bytes = localReport.Render(
-                "PDF",
-                null,
-                out mimeType,
-                out encoding,
-                out fileNameExtension,
-                out streams,
-                out warnings);
+            localReport.ReportPath = report.DefinitionFilePath;
 
-            return bytes;
+            return localReport.Render(outputType.ToString());
         }
 
-        public static byte[] CreatePdf(ReportFromFileDefinitionFacade reportFacade)
+        private static LocalReport GetNewLocalReport(DataSet dataSet)
         {
             var reportViewer = new ReportViewer();
             LocalReport localReport = reportViewer.LocalReport;
 
             localReport.SubreportProcessing += LocalReport_SubreportProcessing;
             localReport.EnableExternalImages = true;
-            localReport.ReportPath = reportFacade.DefinitionFilePath;
 
             localReport.DataSources.Clear();
 
-            foreach (DataTable datatable in reportFacade.ReportDataSet.Tables)
+            foreach (DataTable datatable in dataSet.Tables)
             {
                 localReport.DataSources.Add(new ReportDataSource(datatable.TableName, datatable));
             }
 
-            Warning[] warnings;
-            string mimeType, encoding, fileNameExtension;
-            string[] streams;
-
-            byte[] bytes = localReport.Render(
-                "PDF", 
-                null, 
-                out mimeType, 
-                out encoding, 
-                out fileNameExtension,
-                out streams, 
-                out warnings);
-
-            return bytes;
+            return localReport;
         }
 
         private static void LocalReport_SubreportProcessing(object sender, SubreportProcessingEventArgs e)
