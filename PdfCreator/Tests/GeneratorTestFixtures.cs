@@ -122,8 +122,15 @@ namespace PdfCreator.Tests
 
             dataset.Template.AddTemplateRow(masterDataRow);
 
+            masterDataRow = dataset.Template.NewTemplateRow();
+            masterDataRow.Id = 3;
+            masterDataRow.Name = "Master Data Row 3";
+            masterDataRow.Description = "Description about master data row 3";
+
+            dataset.Template.AddTemplateRow(masterDataRow);
+
             var detailDataRow = dataset.Template_Detail.NewTemplate_DetailRow();
-            detailDataRow.Description = "Description about detail data row 1";
+            detailDataRow.Description = "Master 1, detail data row 1";
             detailDataRow.Name = "Name of description row 1";
             detailDataRow.MasterDataId = 1;
             detailDataRow.Id = 4;
@@ -131,10 +138,27 @@ namespace PdfCreator.Tests
             dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
 
             detailDataRow = dataset.Template_Detail.NewTemplate_DetailRow();
-            detailDataRow.Description = "Description about detail data row 2";
+            detailDataRow.Description = "Master 1, about detail data row 2";
             detailDataRow.Name = "Name of description row 2";
             detailDataRow.MasterDataId = 1;
-            detailDataRow.Id = 6;
+            detailDataRow.Id = 7;
+
+            dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
+
+
+            detailDataRow = dataset.Template_Detail.NewTemplate_DetailRow();
+            detailDataRow.Description = "Master 3, Detail data row 1";
+            detailDataRow.Name = "Name of description row 1";
+            detailDataRow.MasterDataId = 3;
+            detailDataRow.Id = 10;
+
+            dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
+
+            detailDataRow = dataset.Template_Detail.NewTemplate_DetailRow();
+            detailDataRow.Description = "Master 3, detail data row 2";
+            detailDataRow.Name = "Name of description row 2";
+            detailDataRow.MasterDataId = 3;
+            detailDataRow.Id = 11;
 
             dataset.Template_Detail.AddTemplate_DetailRow(detailDataRow);
 

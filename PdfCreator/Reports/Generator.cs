@@ -45,6 +45,7 @@ namespace PdfCreator.Reports
 
             localReport.SubreportProcessing += LocalReport_SubreportProcessing;
             localReport.EnableExternalImages = true;
+            localReport.EnableHyperlinks = true;
 
             localReport.DataSources.Clear();
 
