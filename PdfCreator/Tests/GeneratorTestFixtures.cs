@@ -23,7 +23,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateSample1Dataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\Sample1\\Template.rdlc");
-            var file = Reports.Generator.CreatePdf(reportDefinition);
+            var file = Reports.Generator.CreateFile(reportDefinition);
 
             SaveFile(file, "SimpleDataSet.pdf");
         }
@@ -33,7 +33,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateSample1Dataset();
             var reportDefinition = new ReportFromStreamDefinitionFacade(dataset, File.ReadAllBytes("Reports\\Sample1\\Template.rdlc"));
-            var file = Reports.Generator.CreatePdf(reportDefinition);
+            var file = Reports.Generator.CreateFile(reportDefinition);
 
             SaveFile(file, "SimpleDataSetViaStreamDefinition.pdf");
         }
@@ -43,7 +43,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateMasterDetailDataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
-            var file = Reports.Generator.CreatePdf(reportDefinition);
+            var file = Reports.Generator.CreateFile(reportDefinition);
 
             SaveFile(file, "MasterDetailDataSet.pdf");
         }
@@ -53,7 +53,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateMasterDetailDataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
-            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.WORD);
+            var file = Reports.Generator.CreateFile(reportDefinition, Generator.FileTypes.WORD);
 
             SaveFile(file, "MasterDetailDataSet.doc");
         }
@@ -63,7 +63,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateMasterDetailDataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
-            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.EXCEL);
+            var file = Reports.Generator.CreateFile(reportDefinition, Generator.FileTypes.EXCEL);
 
             SaveFile(file, "MasterDetailDataSet.xls");
         }
@@ -73,7 +73,7 @@ namespace PdfCreator.Tests
         {
             var dataset = CreateMasterDetailDataset();
             var reportDefinition = new ReportFromFileDefinitionFacade(dataset, "Reports\\MasterDetailSample\\Template.rdlc");
-            var file = Reports.Generator.CreatePdf(reportDefinition, Generator.FileTypes.IMAGE);
+            var file = Reports.Generator.CreateFile(reportDefinition, Generator.FileTypes.IMAGE);
 
             SaveFile(file, "MasterDetailDataSet.jpg");
         }
@@ -85,7 +85,7 @@ namespace PdfCreator.Tests
             var report = new ReportFromStreamDefinitionFacade(dataset, File.ReadAllBytes("Reports\\MasterDetailSample\\Template.rdlc"));
 
             report.SubReports.Add(new SubReportFromStreamDefinitionFacade(File.ReadAllBytes("Reports\\MasterDetailSample\\Template_Detail.rdlc"), "Template_Detail"));            
-            var file = Reports.Generator.CreatePdf(report);
+            var file = Reports.Generator.CreateFile(report);
 
             SaveFile(file, "MasterDetailDatasetFromStream.pdf");
         }

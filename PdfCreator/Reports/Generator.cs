@@ -16,7 +16,7 @@ namespace PdfCreator.Reports
     {
         public enum FileTypes { PDF, WORD, EXCEL, IMAGE }
 
-        public static byte[] CreatePdf(ReportFromStreamDefinitionFacade report, FileTypes ouputType = FileTypes.PDF)
+        public static byte[] CreateFile(ReportFromStreamDefinitionFacade report, FileTypes ouputType = FileTypes.PDF)
         {
             var localReport = GetNewLocalReport(report.ReportDataSet);
             localReport.LoadReportDefinition(report.Definition);
@@ -29,7 +29,7 @@ namespace PdfCreator.Reports
             return localReport.Render(ouputType.ToString());
         }
         
-        public static byte[] CreatePdf(ReportFromFileDefinitionFacade report, FileTypes outputType = FileTypes.PDF)
+        public static byte[] CreateFile(ReportFromFileDefinitionFacade report, FileTypes outputType = FileTypes.PDF)
         {
             var localReport = GetNewLocalReport(report.ReportDataSet);
 
