@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace PdfCreator.Reports.MasterDetailSample {
+namespace SeeTheLink.PdfCreator.Reports.MasterDetailSample {
     
     
     /// <summary>
@@ -312,7 +312,7 @@ namespace PdfCreator.Reports.MasterDetailSample {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class TemplateDataTable : global::System.Data.TypedTableBase<TemplateRow> {
+        public partial class TemplateDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
             
             private global::System.Data.DataColumn columnId;
             
@@ -430,6 +430,12 @@ namespace PdfCreator.Reports.MasterDetailSample {
             public TemplateRow FindById(int Id) {
                 return ((TemplateRow)(this.Rows.Find(new object[] {
                             Id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public virtual global::System.Collections.IEnumerator GetEnumerator() {
+                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -598,7 +604,7 @@ namespace PdfCreator.Reports.MasterDetailSample {
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class Template_DetailDataTable : global::System.Data.TypedTableBase<Template_DetailRow> {
+        public partial class Template_DetailDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
             
             private global::System.Data.DataColumn columnId;
             
@@ -727,6 +733,12 @@ namespace PdfCreator.Reports.MasterDetailSample {
             public Template_DetailRow FindById(int Id) {
                 return ((Template_DetailRow)(this.Rows.Find(new object[] {
                             Id})));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public virtual global::System.Collections.IEnumerator GetEnumerator() {
+                return this.Rows.GetEnumerator();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

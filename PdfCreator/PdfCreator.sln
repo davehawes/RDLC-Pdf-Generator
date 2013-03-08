@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfCreator", "PdfCreator.csproj", "{0956607A-2CF1-4A3A-BA9D-B4C15D0646C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeTheLink.PdfCreator", "SeeTheLink.PdfCreator.csproj", "{0956607A-2CF1-4A3A-BA9D-B4C15D0646C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
